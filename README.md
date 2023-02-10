@@ -11,7 +11,7 @@ pip install ipa2
 ```
 
 Before using :
-```bash
+```python
 from ipa2 import IPA2
 ```
 
