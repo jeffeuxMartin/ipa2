@@ -1,33 +1,48 @@
 import itertools
+import pkg_resources
 
 import nlp2
-import pkg_resources
 
 
 class IPA2:
-    def __init__(self, lang='yue'):
+    def __init__(self, lang="yue"):
+        """
+        lang: IPA 轉換的語言
+        """
         super().__init__()
         self.data = {}
         if isinstance(lang, str):
             self.data = self.load_lang_to_list(lang)
         elif isinstance(lang, list):
             for i in lang:
-                self.data.update(self.load_lang_to_list(i))
+                self.data.update(
+                    self.load_lang_to_list(i))
 
     def load_lang_to_list(self, lang):
-        file_loc = pkg_resources.resource_filename(__name__, 'data/' + lang + '.tsv')
+        """
+        (load_lang_to_list?)
+        """
+        file_loc = pkg_resources.resource_filename(
+            __name__, "data/" + lang + ".tsv")
         if nlp2.is_file_exist(file_loc):
-            tdict = nlp2.read_csv(file_loc, delimiter='\t')
+            tdict = nlp2.read_csv(
+                file_loc, delimiter="\t")
             t = {}
             for i in tdict:
                 t[i[0]] = i[1]
             return t
         else:
-            assert FileNotFoundError
+            raise FileNotFoundError(
+                f"""{lang} not supported as `"""
+                f"data/{lang}.tsv"
+                """` is not provided..."""
+            )
 
-    def convert_sent(self, input='測試的句子'):
+    def convert_sent(self, input="測試的句子"):
         not_converted_char = []
-        input = nlp2.split_sentence_to_array(input, False)
+        input = nlp2.split_sentence_to_array(
+            input, False
+        )
         result = []
         # maximum match
         senlen = len(input)
@@ -35,7 +50,9 @@ class IPA2:
         while start < senlen:
             matched = False
             for i in range(senlen, 0, -1):
-                string = "".join(input[start:start + i])
+                string = "".join(
+                    input[start : start + i]
+                )
                 if string in self.data:
                     result.append(string)
                     matched = True
@@ -49,7 +66,12 @@ class IPA2:
         ipa_result = []
         for i in result:
             if i in self.data:
-                ipa_result.append(self.data[i].split(","))
+                ipa_result.append(
+                    self.data[i].split(",")
+                )
             else:
                 not_converted_char.append(i)
-        return [" ".join(x) for x in itertools.product(*ipa_result)], not_converted_char
+        return [
+            " ".join(x)
+            for x in itertools.product(*ipa_result)
+        ], not_converted_char
