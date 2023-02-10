@@ -6,12 +6,12 @@ Tools for convert Text to IPA in python
 
 Install:
 
-```
+```bash
 pip install ipa2
 ```
 
 Before using :
-```
+```bash
 from ipa2 import IPA2
 ```
 
@@ -27,7 +27,7 @@ Arguments
 Returns  
 - `list(String)` : list of the result
 Examples  
-```
+```python
 IPAConverter('yue')
 print(IPAConverter.convert_sent("你好"))
 ## ['nei˩˧ hou˧˥', 'lei˩˧ hou˧˥']
